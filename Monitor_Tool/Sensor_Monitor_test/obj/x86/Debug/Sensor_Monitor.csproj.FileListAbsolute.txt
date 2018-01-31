@@ -1,0 +1,10 @@
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\obj\x86\Debug\LED_control_test.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\obj\x86\Debug\LED_control_test.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\bin\Debug\LED_control_test.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\bin\Debug\LED_control_test.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\obj\x86\Debug\Sensor_Monitor.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\obj\x86\Debug\LED_control_test.Form1.resources
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\obj\x86\Debug\LED_control_test.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_1\Sensor_Monitor_test\obj\x86\Debug\Sensor_Monitor.csproj.GenerateResource.Cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_2\Sensor_Monitor_test\obj\x86\Debug\LED_control_test.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\Motion_Sensor_Monitor_2\Sensor_Monitor_test\obj\x86\Debug\LED_control_test.pdb

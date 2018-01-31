@@ -1,0 +1,10 @@
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\obj\x86\Debug\LED_control_test.Form1.resources
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\obj\x86\Debug\LED_control_test.Properties.Resources.resources
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\obj\x86\Debug\LED_control_test.csproj.GenerateResource.Cache
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\bin\Debug\LED_control_test.exe
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\bin\Debug\LED_control_test.pdb
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\obj\x86\Debug\LED_control_test.exe
+c:\users\user\documents\visual studio 2010\Projects\LED_control_test\LED_control_test\obj\x86\Debug\LED_control_test.pdb
+C:\Users\user\Documents\Visual Studio 2010\Projects\LED_control_test\LED_control_test\obj\x86\Debug\LED_control_test.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2010\Projects\EnergyMT_LED_control_test_11\LED_control_test\obj\x86\Debug\LED_control_test.exe
+C:\Users\user\Documents\Visual Studio 2010\Projects\EnergyMT_LED_control_test_11\LED_control_test\obj\x86\Debug\LED_control_test.pdb
