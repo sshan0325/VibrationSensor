@@ -642,7 +642,7 @@ namespace LED_control_test
             decimal fct1_tmp_1, fct1_tmp_2, fct1_tmp_3;
             decimal fct0_result, fct1_result;
 
-            if (TxBuffer[3] == (byte)0xC1)  // CMD가 MODE1 일 때
+            if (TxBuffer[3] != (byte)0xC2)  // CMD가 MODE1 일 때
             {
                 // HEX를 DEC로 전환 (Frequency)
                 freq_tmp_1 = Convert.ToInt32(HEX_str[5], 16);   //소수 부분
@@ -669,7 +669,6 @@ namespace LED_control_test
                 // HEX를 DEC로 전환 (Noise)
                 noise = Convert.ToInt32(HEX_str[12], 16);      //정수 부분
 
-                //txt_read.AppendText("cnt: "+cnt_val+"\r\n");
                 cnt_val++;                                     // 패킷 받을 때마다 카운트
                 if (cnt_val == 5)                              // 패킷을 총 5번 받으면 Form에 데이터 라인 업데이트 & Log 표시
                 {
@@ -680,10 +679,15 @@ namespace LED_control_test
                     txt_read.AppendText("\n");
 
                     // csv파일 생성
-                    Log(buffer[1], amp_Log, freq_Log, dB_result, state);
+                    Log(buffer[1], amp_Log, freq_Log, dB_result, state, noise);
 
                     // 데이터 표시
                     show_data(amp_group, freq_group, dB_result, state, noise);
+                }
+                else if (cnt_val > 5)
+                {
+                    txt_read.AppendText("중단, 재시도");
+                    cnt_val = 0;
                 }
             }
             else if (TxBuffer[3] == (byte)0xC2)  // CMD가 Mode2일 때
@@ -1204,7 +1208,7 @@ namespace LED_control_test
                 }
                 catch (Exception err)
                 {
-                    //txt_read.AppendText("길이를 벗어났습니다.\r\n");
+                    txt_read.AppendText("길이를 벗어났습니다.\r\n");
                     //txt_read.AppendText("i: " + i + "      " + "i - temp_len: " + (i - temp_len) + "\r\n");
                 }
             }
@@ -1215,9 +1219,12 @@ namespace LED_control_test
             //txt_read.AppendText("total_pkt: " + total_pkt + "\r\n");
             // 받은 패킷을 뷰어에 출력 
 
+            Console.WriteLine("len: " + pkt_len + "total:" + total_pkt);
 
-            if (total_pkt == 14)    // 3바이트 더 추가(평균값/dB 정수, 소수, 단계) + 소음값 추가
+            if (total_pkt >= 14)    // 3바이트 더 추가(평균값/dB 정수, 소수, 단계) + 소음값 추가
             {
+                if (total_pkt > 14)
+                    total_pkt = 14;
                 for (int i = 0; i < total_pkt; i++)
                 {
                     txt_read.AppendText(buffer[i] + " ");
@@ -1252,6 +1259,7 @@ namespace LED_control_test
                     ID_flag = false;
                 }
             }
+
 
             // ============================= STX와 ID가 맞을 경우  =============================
             if ((stx_flag == true) && (ID_flag == true))
@@ -1321,8 +1329,8 @@ namespace LED_control_test
         }
         #endregion
 
-        #region Log(Id, Amp, Freq, Avr(2~5), Level)
-        public void Log(string str1, string[] str2, string[] str3, decimal dB, decimal level)
+        #region Log(Id, Amp, Freq, Avr(2~5), Level, noise)
+        public void Log(string str1, string[] str2, string[] str3, decimal dB, decimal level, decimal noise)
         {
             /*
             if (flag_Log_make == true)
@@ -1362,15 +1370,15 @@ namespace LED_control_test
                         //if (flag_Log_title == true)
                         //{
                         flag_Log_title = false;
-                        temp = string.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}",
-                                             "Date", "Time", "ID", "Amp 1", "Freq 1", "Amp 2", "Freq 2", "Amp 3", "Freq 3", "Amp 4", "Freq 4", "Amp 5", "Freq 5", "Avr(#2~5)", "Level");
+                        temp = string.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}",
+                                             "Date", "Time", "ID", "Amp 1", "Freq 1", "Amp 2", "Freq 2", "Amp 3", "Freq 3", "Amp 4", "Freq 4", "Amp 5", "Freq 5", "Avr(#2~5)", "Level", "Noise(dB)");
                         //"Time", "ID", "Amplitude1", "Frequency1", "Amplitude2", "Frequency2", "Amplitude3", "Frequency3",
                         //"Amplitude4", "Frequency4", "Amplitude5", "Frequency5");
                         sw.WriteLine(temp);
                         //}
-                        temp = string.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}",
+                        temp = string.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}",
                                              DateTime.Today.ToString("yy.MM.dd"), GetDateTime(), str1, str2[0], str3[0], str2[1],
-                                             str3[1], str2[2], str3[2], str2[3], str3[3], str2[4], str3[4], dB.ToString(), level.ToString());
+                                             str3[1], str2[2], str3[2], str2[3], str3[3], str2[4], str3[4], dB.ToString(), level.ToString(), noise.ToString());
                         sw.WriteLine(temp);
                         sw.Close();
                     }
@@ -1379,9 +1387,9 @@ namespace LED_control_test
                 {
                     using (StreamWriter sw = File.AppendText(FilePath))
                     {
-                        temp = string.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}",
+                        temp = string.Format("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}",
                                              DateTime.Today.ToString("yy.MM.dd"), GetDateTime(), str1, str2[0], str3[0], str2[1], str3[1],
-                                             str2[2], str3[2], str2[3], str3[3], str2[4], str3[4], dB.ToString(), level.ToString());
+                                             str2[2], str3[2], str2[3], str3[3], str2[4], str3[4], dB.ToString(), level.ToString(), noise.ToString());
                         sw.WriteLine(temp);
                         sw.Close();
                     }
