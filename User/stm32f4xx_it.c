@@ -36,7 +36,7 @@
 /* Private variables ---------------------------------------------------------*/
 // 변수 추가 17.06.12
 unsigned char Rx_Compli_Flag = RESET;
-unsigned char Packet_Number = 0;
+//unsigned char Packet_Number = 0;
 unsigned char Rx_Count = 0 ;
 unsigned char Rx_Buffer[10];
 unsigned char Rx_Buffer_temp[10];
@@ -162,8 +162,15 @@ void USART2_IRQHandler(void)                                   // RCU 패킷 수신 
 {	  
     if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
     {	
-        Rx_Buffer[Rx_Count] = USART_ReceiveData(USART2);	
-        Rx_Count++;        
+        Rx_Buffer[Rx_Count] = USART_ReceiveData(USART2);
+        if (Rx_Buffer[0] == 0x02)
+        {
+          Rx_Count++;        
+        }
+        else
+        {
+          Rx_Count=0;
+        }
              
         if(Rx_Count == 6)
         {	                  
@@ -208,8 +215,15 @@ void USART2_IRQHandler(void)                                   // RCU 패킷 수신 
                         break;
                     }
                 }
-                                
-                j++;
+                else
+                {
+                  j++;
+                  if (j>4)                    
+                  {
+                    j=0;
+                    break;
+                  }
+                }
             }
          
            /*
@@ -219,7 +233,7 @@ void USART2_IRQHandler(void)                                   // RCU 패킷 수신 
             }
            */
             Rx_Compli_Flag = SET ; 
-            Packet_Number = Rx_Count-1;                         // 패킷 길이 저장
+            //Packet_Number = Rx_Count-1;                         // 패킷 길이 저장
             Rx_Count = 0;      
         }
     }

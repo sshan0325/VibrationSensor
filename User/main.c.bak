@@ -51,7 +51,7 @@ char Output[TEST_LENGTH_SAMPLES/2][14];
 
 // RS485 송수신 용
 extern unsigned char Rx_Compli_Flag;
-//extern unsigned char Packet_Number;
+extern unsigned char Packet_Number;
 extern unsigned char Rx_Count;
 extern unsigned char Rx_Buffer[10];
 extern unsigned char Rx_Buffer_temp[10];
@@ -78,7 +78,7 @@ float factor_0 = 0.1738;          // 예측식: y=0.009*x+0.1738  ->  x=(y-0.1738)*
 uint8_t tmp_0[3];
 float factor_1 = 111.111;
 uint8_t tmp_1[4];
-uint8_t SensingFactor=3;
+uint8_t SensingFactor=4;
 
 int rs485_dir(int rx)
 {
@@ -157,7 +157,7 @@ int main(void)
         LIS302DL_Read(Buffer, LIS302DL_OUT_Z_ADDR, 6); 
        
         /* 진동 크기 변화가 생겼을 경우 */
-        if(abs(temp_Z - Buffer[0]) > SensingFactor)
+        if(abs(temp_Z - Buffer[0]) >= SensingFactor)
         {
             flag_SENSE = 1;                                             // 진동 측정 플래그 - On  
             GPIO_SetBits(GPIOD, GPIO_Pin_12);                 // LED(Green) - On
@@ -227,11 +227,12 @@ int main(void)
             Output[0][9] = tmp_1[1];                                //  D5 --> factor1 소수1
             Output[0][10] = tmp_1[0];                               //  D6 --> factor1 정수
             Output[0][11] = 0;                                          //  더미
-            Output[0][12] = Check_Byte(Output[0]);            //  CS
+            Output[0][12] = 0;                                          //  더미
+            Output[0][13] = Check_Byte(Output[0]);            //  CS
         
             seq++;
 
-            if(seq > 254)
+            if(seq > 255)
             {
                 seq = 0;
             }
@@ -241,7 +242,7 @@ int main(void)
             rs485_dir(1);                                                // RTC High - TX
             Delay(40);    
             
-            for(j=0; j<13; j++)
+            for(j=0; j<14; j++)
             {
                 while( !(USART2->SR & 0x00000040) );
                 USART_SendData(USART2, Output[0][j]);
